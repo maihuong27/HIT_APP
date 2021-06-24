@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@mipmap/hit"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Quên mật khẩu"
+        android:layout_above="@id/lnKhungMatKhau"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FF5722"
+        android:layout_marginTop="70dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/lnKhungMatKhau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custuom_edittext"
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            android:drawableLeft="@mipmap/email"
+            android:hint="Email"
+            android:drawablePadding="10dp"
+            android:textColorHint="#CCC"
+            android:textColor="@color/black"/>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnGuiMa"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Gửi mã "
+        android:backgroundTint="#FF5722"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:layout_below="@id/lnKhungMatKhau"/>
+</RelativeLayout>
