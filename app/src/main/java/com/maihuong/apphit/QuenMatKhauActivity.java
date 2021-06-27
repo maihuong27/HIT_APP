@@ -22,7 +22,19 @@ import com.maihuong.apphit.configs.Constant;
 
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class QuenMatKhauActivity extends AppCompatActivity {
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[0-9])" +     //có ít nhất một số
+                    "(?=.*[a-z])" +     //có ít nhất một ký tự viết thường
+                    "(?=.*[A-Z])" +     //có ít nhất một ký tự viết hoa
+                    //"?=.*[a-zA-Z]" +
+                    "(?=.*[@#$%^&+=])" +    //có ít nhất một ký tự đặc biệt
+                    "(?=\\S+$)" +   //không có khoảng trắng
+                    ".{6,}" +   // có ít nhất 6 ký tự
+                    "$");
 
     EditText edtmaXacNhan, edtMKMoi, edtXacNhan;
     Button btnXacNhan;
@@ -37,8 +49,24 @@ public class QuenMatKhauActivity extends AppCompatActivity {
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iDangNhap = new Intent(QuenMatKhauActivity.this, DangNhapActivity.class);
-                startActivity(iDangNhap);
+                String codeToken = edtmaXacNhan.getText().toString().trim();
+                String newPass = edtMKMoi.getText().toString().trim();
+                String confirmPass = edtXacNhan.getText().toString().trim();
+                if (codeToken.isEmpty()){
+                    edtmaXacNhan.setError("Field can't be empty");
+                    Toast.makeText(QuenMatKhauActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+                } else if (newPass.isEmpty()) {
+                    edtMKMoi.setError("Field can't be empty");
+                    Toast.makeText(QuenMatKhauActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+                } else if (!PASSWORD_PATTERN.matcher(newPass).matches()) {
+                    edtMKMoi.setError("Password too weak");
+                    Toast.makeText(QuenMatKhauActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+                } else if(newPass.compareTo(confirmPass) != 0) {
+                    edtXacNhan.setError("Passwords must match");
+                    Toast.makeText(QuenMatKhauActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    checkTocken();
+                }
             }
         });
     }
@@ -50,25 +78,17 @@ public class QuenMatKhauActivity extends AppCompatActivity {
         btnXacNhan = (Button) findViewById((R.id.btnXacNhan));
     }
 
-    public void doiMatKhau() {
+    public void checkTocken() {
         String confirmCode = edtmaXacNhan.getText().toString();
         RequestQueue requestQueue = Volley.newRequestQueue(QuenMatKhauActivity.this);
 
         JSONObject objectLogin = new JSONObject();
-        try {
-            objectLogin.put("newPassword", edtMKMoi.getText().toString());
-            objectLogin.put("confirmPassword", edtXacNhan.getText().toString());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
 
-        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.BASE_API + "/api/v1/resetPassword?token=" + confirmCode,
+        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.BASE_API + "/api/v1/check-token?token=" + confirmCode,
                 objectLogin, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getBaseContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getBaseContext(), DangKyActivity.class);
-                startActivity(intent);
+                doiMatKhau(confirmCode);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -77,6 +97,34 @@ public class QuenMatKhauActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(loginRequest);
+    }
+
+    public void doiMatKhau(String token) {
+        String newPass = edtMKMoi.getText().toString();
+        RequestQueue requestQueue = Volley.newRequestQueue(QuenMatKhauActivity.this);
+
+        JSONObject objectNewPass = new JSONObject();
+        try {
+            objectNewPass.put("password", edtMKMoi.getText().toString());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        JsonObjectRequest newPassRequest = new JsonObjectRequest(Request.Method.POST, Constant.BASE_API + "/api/v1/resetPassword?token=" + token,
+                objectNewPass, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getBaseContext(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(), DangKyActivity.class);
+                startActivity(intent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getBaseContext(), "Đổi mật khẩu thất bại thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(newPassRequest);
     }
 
 }

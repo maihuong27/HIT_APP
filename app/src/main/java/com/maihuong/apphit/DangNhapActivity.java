@@ -35,6 +35,9 @@ public class DangNhapActivity extends AppCompatActivity {
         btnDangNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userName = edttenDN.getText().toString().trim();
+                String password = edtMKDN.getText().toString().trim();
+                DangNhap(userName, password);
                 kiemTraDN();
             }
         });
@@ -65,13 +68,16 @@ public class DangNhapActivity extends AppCompatActivity {
     }
 
     public boolean DangNhap(String sTenDN, String sMatKhau) {
-        if (sTenDN.isEmpty() == true || sMatKhau.isEmpty() == true){
-            Toast.makeText(this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+        if (sTenDN.isEmpty()){
+            edttenDN.setError("Field can't be empty");
+            Toast.makeText(DangNhapActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
             return false;
-        } else {
-            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            return true;
+        } else if (sMatKhau.isEmpty()) {
+            edtMKDN.setError("Field can't be empty");
+            Toast.makeText(DangNhapActivity.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+            return false;
         }
+        return true;
     }
 
     public void kiemTraDN() {
@@ -96,7 +102,7 @@ public class DangNhapActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Mật khẩu hoặc tên tài khoản không đúng", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(loginRequest);

@@ -55,7 +55,8 @@
             android:hint="Mật khẩu mới"
             android:drawablePadding="10dp"
             android:textColorHint="#CCC"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:inputType="textPassword"/>
 
         <EditText
             android:id="@+id/edtXacNhan"
@@ -68,7 +69,8 @@
             android:hint="Xác nhận mật khẩu"
             android:drawablePadding="10dp"
             android:textColorHint="#CCC"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:inputType="textPassword"/>
 
     </LinearLayout>
 

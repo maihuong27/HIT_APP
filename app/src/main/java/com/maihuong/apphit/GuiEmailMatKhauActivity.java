@@ -1,5 +1,6 @@
 package com.maihuong.apphit;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -55,7 +56,7 @@ public class GuiEmailMatKhauActivity extends AppCompatActivity {
             System.out.println(e);
         }
 
-        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.GET, Constant.BASE_API + "/api/v1/forgetPassword/" + email,
+        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, Constant.BASE_API + "/api/v1/forgetPassword/" + email,
                 objectLogin, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

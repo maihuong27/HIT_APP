@@ -65,7 +65,9 @@
             android:drawableLeft="@mipmap/password"
             android:drawablePadding="10dp"
             android:textColor="@color/black"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textPassword"
+            />
 
         <TextView
             android:id="@+id/tvquenMK"
